@@ -11,8 +11,12 @@ const PORT = process.env.PORT;
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
+app.set('view engine', 'pug');
+app.set('views', 'views');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(rootDir, 'Public')));
+
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
 
