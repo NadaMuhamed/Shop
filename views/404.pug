@@ -1,21 +1,10 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Document
-        link(rel="stylesheet", href="/css/main.css")
-        link(rel="stylesheet", href="/css/product.css")
-    body 
-        ul.nav
-            li
-                a(href="/").nav__item Shop
-            li
-                a(href="/admin/add-product").nav__item Add Product
-
-        main.center-page
-            section.card.error-box
-                div.error-code 404
-                h1.error-title Page Not Found
-                p.error-text The page you are looking for does not exist or may have been moved.
-                a.btn(href="/") Go Back Home
+extends layouts/main-layout
+block content
+  main.container
+  body
+    main.center-page
+        section.card.error-box
+            div.error-code 404
+            h1.error-title Page Not Found
+            p.error-text The page you are looking for does not exist or may have been moved.
+            a.btn(href="/") Go Back Home
