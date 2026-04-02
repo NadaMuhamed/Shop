@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title shop
+        link(rel="stylesheet", href="/css/product.css")
+        link(rel="stylesheet", href="/css/main.css")
+    body 
+        ul.nav
+            li
+                a(href="/").nav__item Shop
+            li
+                a(href="/admin/add-product").nav__item Add Product
+
+        main.container
+            section.card
+                h1.page-title Add Product
+                p.page-text Enter a product title below to add a new product to your shop.
+                form.product-form(action="/admin/add-product", method="POST")
+                    label.form-label(for="title") Product Title
+                    input.form-input(type="text", id="title", name="title", placeholder="Enter product title", required)
+                    button.btn(type="submit") Add Product
