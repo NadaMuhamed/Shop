@@ -4,16 +4,16 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title shop
+        link(rel="stylesheet", href="/css/product.css")
+        link(rel="stylesheet", href="/css/main.css")
     body 
         ui.nav
             li
-                a(href="/" class="active") Home
+                a(href="/") Shop
             li
-                a(href="/shop") Shop
-            li
-                a(href="/add-product") Add Product
+                a(href="/admin/add-product") Add Product
 
-       main.container
-        section.card
-            h1.page-title Shop
-            p.page-text All products will appear here in a clean and simple layout.
+        main.container
+            section.card
+                h1.page-title Shop
+                p.page-text All products will appear here in a clean and simple layout.
