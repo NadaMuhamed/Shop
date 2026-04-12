@@ -9,7 +9,10 @@ router.get('/', (req, res) => {
     res.render('shop', {
         prods: adminData.products,
         docTitle: 'Shop',
-        path: '/'
+        path: '/',
+        hasProducts: adminData.products.length > 0,
+        activeShop: true,
+        productCSS: true // Add this line
     });
 });
 
