@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const path = require('path');
 const rootDir = require('./utils/path');
+const errorController = require('./controller/error');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,14 +20,7 @@ app.use(express.static(path.join(rootDir, 'Public')));
 app.use('/admin', adminRoutes.router);
 app.use('/', shopRoutes);
 
-app.use((req, res) => {
-  res.status(404).render('404', {
-    pageTitle: 'Page Not Found',
-    activeShop: false,
-    activeAdmin: false,
-    productCSS: false,
-  });
-});
+app.use(errorController.get404);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
