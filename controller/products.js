@@ -6,7 +6,9 @@ exports.getAddProduct = (req, res, next) => {
     path: '/admin/add-product',
     formsCSS: true,
     productCSS: true,
-    activeAddProduct: true
+    activeAddProduct: true,
+    activeShop: false,
+    activeAdmin: true,
   });
 };
 
@@ -19,11 +21,12 @@ exports.postAddProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   const products = Product.fetchAll();
   res.render('shop', {
-    prods: products,
+    products: products,
     pageTitle: 'Shop',
     path: '/',
     hasProducts: products.length > 0,
     activeShop: true,
+    activeAdmin: false,
     productCSS: true
   });
 };
