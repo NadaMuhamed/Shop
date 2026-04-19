@@ -1,48 +1,39 @@
-const Product = require('../models/product');
+const fs = require('fs');
+const path = require('path');
 
-exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/product-list', {
-      prods: products,
-      pageTitle: 'All Products',
-      path: '/products'
+const p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json');
+
+module.exports = class Product {
+  constructor(title, imageUrl, description, price, id = null) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+    this.id = id || Math.random().toString();
+  }
+
+  save() {
+    fs.readFile(p, 'utf8', (err, fileContent) => {
+      let products = [];
+      if (!err && fileContent.length > 0) {
+        products = JSON.parse(fileContent);
+      }
+      products.push(this);
+      fs.writeFile(p, JSON.stringify(products), err => {
+        if (err) {
+          console.log(err);
+        }
+      });
     });
-  });
-};
+  }
 
-exports.getProduct = (req, res, next) => {
-  const prodId = req.params.productId;
-  console.log(prodId);
-  res.redirect('/');
-};
-
-exports.getIndex = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/index', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/'
+  static fetchAll(cb) {
+    fs.readFile(p, 'utf8', (err, fileContent) => {
+      if (err || fileContent.length === 0) {
+        cb([]);
+      } else {
+        cb(JSON.parse(fileContent));
+      }
     });
-  });
-};
-
-exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    path: '/cart',
-    pageTitle: 'Your Cart'
-  });
-};
-
-exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
-  });
-};
-
-exports.getCheckout = (req, res, next) => {
-  res.render('shop/checkout', {
-    path: '/checkout',
-    pageTitle: 'Checkout'
-  });
+  }
 };
