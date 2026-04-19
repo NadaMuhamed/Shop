@@ -1,38 +1,48 @@
-const products = [];
-const path = require('path');
-const rootDir = require('../utils/path');
-const fs = require('fs');
+const Product = require('../models/product');
 
-module.exports = class Product {
-    constructor(t) {
-        this.title = t;
-    }
+exports.getProducts = (req, res, next) => {
+  Product.fetchAll(products => {
+    res.render('shop/product-list', {
+      prods: products,
+      pageTitle: 'All Products',
+      path: '/products'
+    });
+  });
+};
 
-    save() {
-        const p = path.join(rootDir, 'data', 'products.json');
-        fs.readFile(p, (err, fileContent) => {
-            let products = [];
-            if (!err && fileContent.length > 0) {
-                try {
-                    products = JSON.parse(fileContent);
-                } catch (e) {
-                    products = [];
-                }
-            }
-            products.push(this);
-            fs.writeFile(p, JSON.stringify(products), (err) => {
-                console.log(err);
-            });
-        });
-    }
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  console.log(prodId);
+  res.redirect('/');
+};
 
-    static fetchAll() {
-        const p = path.join(rootDir, 'data', 'products.json');
-        try {
-            const fileContent = fs.readFileSync(p);
-            return JSON.parse(fileContent);
-        } catch (err) {
-            return [];
-        }
-    }
-}
+exports.getIndex = (req, res, next) => {
+  Product.fetchAll(products => {
+    res.render('shop/index', {
+      prods: products,
+      pageTitle: 'Shop',
+      path: '/'
+    });
+  });
+};
+
+exports.getCart = (req, res, next) => {
+  res.render('shop/cart', {
+    path: '/cart',
+    pageTitle: 'Your Cart'
+  });
+};
+
+exports.getOrders = (req, res, next) => {
+  res.render('shop/orders', {
+    path: '/orders',
+    pageTitle: 'Your Orders'
+  });
+};
+
+exports.getCheckout = (req, res, next) => {
+  res.render('shop/checkout', {
+    path: '/checkout',
+    pageTitle: 'Checkout'
+  });
+};
