@@ -36,4 +36,16 @@ module.exports = class Product {
       }
     });
   }
+
+  static findById(id, cb) {
+    fs.readFile(p, 'utf8', (err, fileContent) => {
+      if (err || fileContent.length === 0) {
+        cb(null);
+      } else {
+        const products = JSON.parse(fileContent); 
+        const product = products.find(prod => prod.id === id);
+        cb(product);
+      }
+    });
+  }
 };
