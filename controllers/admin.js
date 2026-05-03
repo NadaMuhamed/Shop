@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.edit;
+  const editMode = req.query.editing;
   if (!editMode) {
     return res.redirect('/');
   }
