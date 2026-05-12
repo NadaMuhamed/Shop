@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const { deleteProduct } = require('../controllers/admin');
 const { error } = require('console');
-
+const cart = require('./cart');
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json');
 
 module.exports = class Product {
@@ -11,12 +10,26 @@ module.exports = class Product {
     this.imageUrl = imageUrl;
     this.description = description;
     this.price = price;
-    this.id = id || Math.random().toString();
+    this.isNewProduct = !id;
+    this.id = id ? id : Math.random().toString();
   }
 
-  save() {
-
-    if (this.id) {
+  save(callback) {
+    if (this.isNewProduct) {
+      fs.readFile(p, 'utf8', (err, fileContent) => {
+        let products = [];
+        if (!err && fileContent.length > 0) {
+          products = JSON.parse(fileContent);
+        }
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), err => {
+          if (err) {
+            console.log(err);
+          }
+          callback();
+        });
+      });
+    } else {
       fs.readFile(p, 'utf8', (err, fileContent) => {
         let products = [];
         if (!err && fileContent.length > 0) {
@@ -29,24 +42,14 @@ module.exports = class Product {
             if (err) {
               console.log(err);
             }
+            callback();
           });
+        } else {
+          callback();
         }
       });
-    } else {
-    
-    fs.readFile(p, 'utf8', (err, fileContent) => {
-      let products = [];
-      if (!err && fileContent.length > 0) {
-        products = JSON.parse(fileContent);
-      }
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), err => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });
-  } }
+    }
+  }
 
   static deleteById(id) {
     fs.readFile(p, 'utf8', (err, fileContent) => {
@@ -63,6 +66,7 @@ module.exports = class Product {
         if (err) {
           console.log(err);
         }
+        cart.deleteProduct(id);
       });
     });
   }
