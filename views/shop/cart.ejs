@@ -4,20 +4,42 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
-            <% if (products.length > 0) { %>
-                <ul>
-                    <% products.forEach(p => { %>
-                        <li>
-                            <p><%= p.title %> (<%= p.cartItem.quantity %>)</p>
-                            <form action="/cart-delete-item" method="POST">
-                                <input type="hidden" value="<%= p.id %>" name="productId">
-                                <button class="btn" type="submit">Delete</button>
-                            </form>
-                        </li>
-                    <% }) %>
-                </ul>
-            <% } else { %>
-                <h1>No Products in Cart!</h1>
-            <% } %>
+            <section class="cart">
+                <h1 class="cart__title">Your Cart</h1>
+                <% if (products.length > 0) { %>
+                    <% let total = 0; %>
+                    <ul class="cart__list">
+                        <% products.forEach(p => { %>
+                            <% total += p.price * p.cartItem.quantity; %>
+                            <li class="cart__item card">
+                                <div class="cart__item-image">
+                                    <img src="<%= p.imageUrl %>" alt="<%= p.title %>">
+                                </div>
+                                <div class="cart__item-details">
+                                    <h2><%= p.title %></h2>
+                                    <p>Quantity: <strong><%= p.cartItem.quantity %></strong></p>
+                                    <p>Price: <strong>$<%= p.price.toFixed(2) %></strong></p>
+                                    <p>Subtotal: <strong>$<%= (p.price * p.cartItem.quantity).toFixed(2) %></strong></p>
+                                </div>
+                                <div class="cart__item-actions">
+                                    <form action="/cart-delete-item" method="POST">
+                                        <input type="hidden" value="<%= p.id %>" name="productId">
+                                        <button class="btn btn--danger" type="submit">Remove</button>
+                                    </form>
+                                </div>
+                            </li>
+                        <% }) %>
+                    </ul>
+                    <div class="cart__summary">
+                        <span>Total</span>
+                        <strong>$<%= total.toFixed(2) %></strong>
+                    </div>
+                <% } else { %>
+                    <div class="cart__empty">
+                        <h1>No products in cart!</h1>
+                        <p>Browse the shop to add items and view them here.</p>
+                    </div>
+                <% } %>
+            </section>
         </main>
         <%- include('../includes/end.ejs') %>
